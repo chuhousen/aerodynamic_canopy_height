@@ -6,46 +6,46 @@ April 26, 2018
 Background
 ----------
 
-The foundation of the *Pennypacker and Baldocchi* \[2015\] method is the logarithmic wind profile defined by Monin-Obukhov similarity theory (MOST) under near-neutral stability conditions (i.e., |(*z**m* − *d*)/*L*|&lt;0.1) \[*Raupach*, 1994; *Raupach*, 1995\].
+The foundation of the *Pennypacker and Baldocchi* \[2015\] method is the logarithmic wind profile defined by Monin-Obukhov similarity theory (MOST) under near-neutral stability conditions (i.e., |(zm-d)/L| &lt; 0.1) \[*Raupach*, 1994; *Raupach*, 1995\].
 
-$$k\*\\frac{WS}{USTAR}=ln(\\frac{(zm-d)}{z0})+ln(lamda)$$
+k \* WS / USTAR = ln((zm - d)/z0)+ln(lamda)
 
-where *k* = 0.4 is the von Karman constant, L is Monin-Obukhov length, USTAR is friction velocity , WS is the mean horizontal wind speed at height zm, z0 and d are roughness length and zero-plane displacement heights, respectively. MOST describes USTAR and WS above the canopy as a logarithmic function of z0 and d. *l**n*(*l**a**m**d**a*) is an influence function associated with the roughness sublayer-a region just above the canopy where turbulence is enhanced \[*Raupach*, 1994; *Raupach*, 1995\], and lamda = 1.25 is assumed when WS is measured relatively close to the canopy top (i.e., *z**m* &lt; 1.5*h**c*, hc: physical canopy height) \[*Massman*, 1997; *Massman et al.*, 2017\]. Otherwise, *l**n*(*l**a**m**d**a*) is assumed negligible (i.e., *l**a**m**d**a* = 1.00).
+where k = 0.4 is the von Karman constant, L is Monin-Obukhov length, USTAR is friction velocity , WS is the mean horizontal wind speed at height zm, z0 and d are roughness length and zero-plane displacement heights, respectively. MOST describes USTAR and WS above the canopy as a logarithmic function of z0 and d. ln(lamda) is an influence function associated with the roughness sublayer-a region just above the canopy where turbulence is enhanced \[*Raupach*, 1994; *Raupach*, 1995\], and lamda = 1.25 is assumed when WS is measured relatively close to the canopy top (i.e., zm &lt; 1.5hc, hc: physical canopy height) \[*Massman*, 1997; *Massman et al.*, 2017\]. Otherwise, ln(lamda) is assumed negligible (i.e., lamda = 1.00).
 
-Both z0 and d are typically expressed as fractions of hc, where *z*0 = *c**o**e**f*1 \* *h**c* and *d* = *c**o**e**f*2 \* *h**c*. The above equation is then rearranged as a function of hc depending on coef1, coef2, zm, WS, and USTAR. zm is typically fixed at the sites. Given any known coef1 and coef2, this theoretical canopy height can be calculated from the measured WS and USTAR \[*Pennypacker and Baldocchi*, 2015\]. We define this theoretical height as the aerodynamic canopy height (ha), because it reflects the canopy's momentum absorption characteristics.
+Both z0 and d are typically expressed as fractions of hc, where coef1 = z0 / hc and coef2 =d / hc. The above equation is then rearranged as a function of hc depending on coef1, coef2, zm, WS, and USTAR. zm is typically fixed at the sites. Given any known coef1 and coef2, this theoretical canopy height can be calculated from the measured WS and USTAR \[*Pennypacker and Baldocchi*, 2015\]. We define this theoretical height as the aerodynamic canopy height (ha), because it reflects the canopy's momentum absorption characteristics.
 
-$$k\*\\frac{WS}{USTAR}=ln(lamda(\\frac{(zm-coef2\*hc)}{coef1\*hc}))$$
-$$hc=ha=\\frac{lamda\*zm}{lamda\*coef2+coef1\*exp(\\frac{k\*WS}{USTAR})}$$
+k \* WS / USTAR = ln(lamda \* ((zm - coef2 \* hc)/(coef1 \* hc))
+hc = ha = (lamda \* zm) / (lamda \* coef2 + coef1 \* exp(k \* WS / USTAR))
 
 ### Variable list
 
--   **WS**: wind speed (*m**s*<sup>−1</sup>)
--   **USTAR**: friction velocity (*m**s*<sup>−1</sup>)
+-   **WS**: wind speed (m s-1)
+-   **USTAR**: friction velocity (m s-1)
 -   **k**: von karman constant, 0.4
--   **zm**: measurement height, (*m*)
--   **z0**: roughness length (*m*)
--   **d**: zero-plane displacement height (*m*)
--   **z**: (= zm - d) sensor height above displacement height
--   **L**: Monin-Obukhov length (*m*)
+-   **zm**: measurement height, (m)
+-   **z0**: roughness length (m)
+-   **d**: zero-plane displacement height (m)
+-   **z**: (= zm - d) sensor height above displacement height (m)
+-   **L**: Monin-Obukhov length (m)
 -   **lamda**: roughness sublayer enhancing factor (1.00~1.25)
 
 ### Input arguments
 
--   **data.in**: R data.frame contains WS (*m**s*<sup>−1</sup>), USTAR (*m**s*<sup>−1</sup>), MO\_LENGTH (*m*), zm (*m*), at *t* consecutive time steps
+-   **data.in**: R data.frame contains WS (m s-1), USTAR (m s-1), MO\_LENGTH (m), zm (m), at t consecutive time steps
 -   **zmax**: maximum zm (measurement height of WS) in the data.in, this is used for the first guess of z in z/L, and for setting the acceptable upper bound for calculated ha
 -   **d.hr**: N of time steps per day, default as 48 for half-hourly files, use 24 for hourly files
--   **coef1**: z0/hc, default as 0.1
--   **coef2**: d/hc, default as 0.6
--   **lamda**: roughness sublayer enhancing factor (1-1.25, Massman 1997, 2017), default as 1 (i.e., no RS correction)
+-   **coef1**: z0/hc, default as 0.1 if unspecified
+-   **coef2**: d/hc, default as 0.6 if unspecified
+-   **lamda**: roughness sublayer enhancing factor (1.00~1.25, Massman 1997, 2017), default as 1 (i.e., no RS correction)
 -   **zL.cut**: cutoff z/L for near-neutral stability, i.e., zL.cut &gt; near-neutral &gt; -zL.cut, default as 0.1
--   **zm.cut**: remove ha estimates that are higher than 1.1\*zm, or not, default as yes
+-   **zm.cut**: (TRUE/FALSE) whether remove ha estimates that are higher than 1.1 \* zm, or not, default as yes
 
 ### Output values
 
 -   **ha**: estimated aerodynamic canopy height
 -   **z**: (= zm - d) sensor height above displacement height
--   **z0**: roughness length, based on ha \* coef1
--   **d**: zero-plane displacement height, based on ha \* coef2
+-   **z0**: roughness length, based on ha\*coef1
+-   **d**: zero-plane displacement height, based on ha\*coef2
 -   **N**: Number of available data for calculation
 -   **Nin**: Number of supposed data length in input
 
