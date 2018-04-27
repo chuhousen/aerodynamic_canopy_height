@@ -8,14 +8,15 @@ Background
 
 The foundation of the *Pennypacker and Baldocchi* \[2015\] method is the logarithmic wind profile defined by Monin-Obukhov similarity theory (MOST) under near-neutral stability conditions (i.e., |(zm-d)/L| &lt; 0.1) \[*Raupach*, 1994; *Raupach*, 1995\].
 
-*k \* WS / USTAR = ln((zm - d)/z0)+ln(lamda)*
+***k \* WS / USTAR = ln((zm - d)/z0)+ln(lamda)***
 
 where k = 0.4 is the von Karman constant, L is Monin-Obukhov length, USTAR is friction velocity , WS is the mean horizontal wind speed at height zm, z0 and d are roughness length and zero-plane displacement heights, respectively. MOST describes USTAR and WS above the canopy as a logarithmic function of z0 and d. ln(lamda) is an influence function associated with the roughness sublayer-a region just above the canopy where turbulence is enhanced \[*Raupach*, 1994; *Raupach*, 1995\], and lamda = 1.25 is assumed when WS is measured relatively close to the canopy top (i.e., zm &lt; 1.5hc, hc: physical canopy height) \[*Massman*, 1997; *Massman et al.*, 2017\]. Otherwise, ln(lamda) is assumed negligible (i.e., lamda = 1.00).
 
 Both z0 and d are typically expressed as fractions of hc, where coef1 = z0 / hc and coef2 =d / hc. The above equation is then rearranged as a function of hc depending on coef1, coef2, zm, WS, and USTAR. zm is typically fixed at the sites. Given any known coef1 and coef2, this theoretical canopy height can be calculated from the measured WS and USTAR \[*Pennypacker and Baldocchi*, 2015\]. We define this theoretical height as the aerodynamic canopy height (ha), because it reflects the canopy's momentum absorption characteristics.
 
-*k \* WS / USTAR = ln(lamda \* ((zm - coef2 \* hc)/(coef1 \* hc))*
-*hc = ha = (lamda \* zm) / (lamda \* coef2 + coef1 \* exp(k \* WS / USTAR))*
+***k \* WS / USTAR = ln(lamda \* ((zm - coef2 \* hc)/(coef1 \* hc))***
+
+***hc = ha = (lamda \* zm) / (lamda \* coef2 + coef1 \* exp(k \* WS / USTAR))***
 
 ### Variable list
 
