@@ -1,0 +1,195 @@
+---
+title: "Aerodynamic Canopy Height (cropland example)"
+output: github_document
+author: Housen Chu
+date: 2018-04-26
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, message = F)
+path<-getwd()
+DataDir<-paste(path,"\\Input\\",sep="")
+OutDir<-paste(path,"\\Output\\",sep="")
+```
+### Load required packages and functions
+```{r include=T, message = F}
+require(car)
+require(MASS)
+source("hc_ddb2.R")
+source("prevailing_WD.R")
+source("z0dhc.ratio.gen.R")
+source("math_util.R")
+```
+## User-defined parameters
+### Workflow Control
+```{r include=T,echo=T}
+mdl.ver <- "R94"      # "R94", "SD00", or "FIXED" 
+shuffle.run <- T      # resample data or not (TRUE/FALSE) when estimation ha, this is intended for error propagation 
+plot.output <- T      # output plot (TRUE/FALSE)
+file.output <- T      # output file (TRUE/FALSE)
+lwd<-7                # width of window (days) in estimating ha
+sim.N <- 1000         # number of simulation for z0/h & d/h
+```
+### Site parameters 
+```{r include=T,echo=T}
+case <- "US-CRT_2011"            # 6-digit Fluxnet/AmeriFlux Site ID (CC-XXX), 4-digit year, separate by "_" 
+res <- "HH"                      # Temporal resolution of the flux/met file ("HH"/"HR"), half-hourly/hourly
+ustr.u <- 0.6                    # upper bound of accepted USTAR (m/s)  
+ustr.l <- 0.1                    # lower bound of accepted USTAR (m/s)
+wd.u <- 247.5                    # upper bound of accepted WD (degree)
+wd.l <- 337.5                    # lower bound of accepted WD (degree)
+k <- 0.4                         # von Karman constant (0.4)
+nos<-length(case)                # number of case
+d.hr <- ifelse(res=="HH",48,24)  # handle hourly/half-hourly data
+```
+## Data input/output
+```{r include=T,echo=T}
+# read in pre-procesed/quality-controlled file 
+data.org<-read.table(paste(DataDir,case,".csv",sep=""),header=T,sep=",",na.string=c("-9999"))
+
+# maximun of zm within the data period, 
+#   this is used for setting the upper bound of accepted ha estimation in hc_ddb2 function
+zmax<-max(data.org$zm_1,na.rm=T)
+
+n.doy<-ceiling(nrow(data.org)/(lwd*d.hr)) # counts of windows for entire dataset
+recs<-nrow(data.org); # number of records
+cwd<-floor(nrow(data.org)/(lwd*d.hr)) ## counts of windows for entire dataset
+
+# rename the variable names, and grab a subset for further analysis
+data.pre<-data.frame(DOY = data.org$DOY,                # Date of the year (1-366)
+                     WS = data.org$WS_1,                # the mean wind speed (m/s)
+                     USTAR = data.org$USTAR_1,          # friction velocity (m/s)
+                     MO_LENGTH = data.org$MO_LENGTH_1,  # Obukhov length L (m) 
+                     zm = data.org$zm_1,                # measurement height of WS, USTAR (m)
+                     WD = data.org$WD_1)                # wind direction (degree from north)  
+
+# prepare a composite table for storing output weekly ha (without roughness sublayer correction)
+#   with all sim.N estimates 
+hc.doy.out<-data.frame(SITE_ID = rep(substr(case,start=1,stop=6),cwd),  # 6-digit SITE ID
+                       DOY = data.pre$DOY[lwd*d.hr*(c(1:cwd)-0.5)],     # Central date of the year of estimate
+                       zm = data.pre$zm[lwd*d.hr*(c(1:cwd)-0.5)],       # max measurement height over the window period   
+                       N.ddb = rep(NA,cwd),                             # N of data available after all filtering
+                       Nin.ddb = rep(NA,cwd))                           # N of data record in original file
+hc.doy.out<-cbind(hc.doy.out,matrix(NA,nrow(hc.doy.out),sim.N))         # sim.N columns for storing all calculated ha 
+
+# prepare a composite table for storing output annual ha (with roughness sublayer correction)
+hc.doy.out2<-hc.doy.out 
+```
+
+### Data filtering   
+```{r include=T,echo=T}    
+
+# filtering data by setting USTAR thresholds
+data.pre[!is.na(data.pre$USTAR)&data.pre$USTAR<ustr.l,c("USTAR","WS","MO_LENGTH")]<-NA
+data.pre[!is.na(data.pre$USTAR)&data.pre$USTAR>ustr.u,c("USTAR","WS","MO_LENGTH")]<-NA
+
+# filtering data by setting WD thresholds
+if(!is.na(wd.l)&!is.na(wd.u)){
+  if(wd.l<wd.u){
+    data.pre[!is.na(data.pre$WD)&data.pre$WD<wd.l,c("USTAR","WS","MO_LENGTH")]<-NA
+    data.pre[!is.na(data.pre$WD)&data.pre$WD>wd.u,c("USTAR","WS","MO_LENGTH")]<-NA
+  }else{
+    data.pre[!is.na(data.pre$WD)&(data.pre$WD<wd.l&data.pre$WD>wd.u),c("USTAR","WS","MO_LENGTH")]<-NA
+  }
+}
+
+# filtering data by setting MO_LENGTH thresholds
+data.pre[!is.na(data.pre$MO_LENGTH)&data.pre$MO_LENGTH>1000,c("USTAR","WS","MO_LENGTH")]<-NA
+data.pre[!is.na(data.pre$MO_LENGTH)&data.pre$MO_LENGTH<(-1000),c("USTAR","WS","MO_LENGTH")]<-NA
+```
+
+### Generte z0/h and d/h pairs
+Generate `r sim.N` pairs of   
+```{r include=T,echo=T}     
+# no LAI input, function uses default LAI = 0.5
+z0dhc.ratio2<-z0dhc.ratio.gen(sim.N=sim.N,mdl.default=mdl.ver)  
+```
+
+### Main calculation for aerodynamic canopy height  
+```{r include=T,echo=T}     
+for(h in 1:cwd){ # loop through the windows
+  
+  # Moving & overlapping windows, size of "lwd",
+  # Center at "cen", span +- 0.5*DOY.wd, Move 1*lwd each iteration
+  cen<-lwd*d.hr*(h-1)+0.5*lwd*d.hr
+  ini.wd<-cen-0.5*lwd*d.hr+1
+  end.wd<-cen+0.5*lwd*d.hr
+  
+  data.in<-data.pre[c(ini.wd:end.wd),]
+  
+  for(n1 in 1:sim.N){
+    if(shuffle.run){
+      if(n1==1){
+        shuffle.ls<-c(1:nrow(data.in))  # original data set
+      }else{
+        shuffle.ls<-sort(sample(c(1:nrow(data.in)),replace=T))  # shuffle with replacement
+      }
+    }else{
+      shuffle.ls<-c(1:nrow(data.in))  # original data set
+    }
+    
+    # ha estimation (without roughness sublayer correction)
+    hc.ddb2.hold<-hc_ddb2(data.in[shuffle.ls,c("WS","USTAR","MO_LENGTH","zm")],
+                          zmax=max(data.in$zm,na.rm=T),
+                          d.hr=d.hr,
+                          coef1=z0dhc.ratio2[n1,1],
+                          coef2=z0dhc.ratio2[n1,2],
+                          lamda=1,
+                          zm.cut=T)
+    hc.doy.out[h,n1+5]<-hc.ddb2.hold[[1]]
+    
+    # ha estimation (with roughness sublayer correction)
+    hc.ddb2.hold2<-hc_ddb2(data.in[shuffle.ls,c("WS","USTAR","MO_LENGTH","zm")],
+                           zmax=max(data.in$zm,na.rm=T),
+                           d.hr=d.hr,
+                           coef1=z0dhc.ratio2[n1,1],
+                           coef2=z0dhc.ratio2[n1,2],
+                           lamda=1.25,
+                           zm.cut=T)
+    hc.doy.out2[h,n1+5]<-hc.ddb2.hold2[[1]]
+    
+    if(n1==1){
+      hc.doy.out$N.ddb[h]<-hc.ddb2.hold[[9]]
+      hc.doy.out2$N.ddb[h]<-hc.ddb2.hold2[[9]]
+      hc.doy.out$Nin.ddb[h]<-hc.ddb2.hold[[10]]
+      hc.doy.out2$Nin.ddb[h]<-hc.ddb2.hold2[[10]]  
+    }
+  }
+}
+```
+
+
+### Example plot 
+```{r include=T,echo=F}   
+if(plot.output){
+  par(oma=c(0,0,0,0),mar=c(4.5,4.5,1.5,0.5))
+  plot(hc.doy.out$DOY,apply(hc.doy.out[,5+c(1:sim.N)],1,na.median),col="deepskyblue",pch="-",cex=1.5,
+       xlab="DOY",ylab="ha (m)",ylim=c(0,zmax))
+  points(hc.doy.out2$DOY,apply(hc.doy.out2[,5+c(1:sim.N)],1,na.median),col="darkorange",pch="-",cex=1.5) 
+  segments(hc.doy.out$DOY,apply(hc.doy.out[,5+c(1:sim.N)],1,q250),
+           hc.doy.out$DOY,apply(hc.doy.out[,5+c(1:sim.N)],1,q750),
+           col="deepskyblue",lwd=3)
+  segments(hc.doy.out$DOY,apply(hc.doy.out[,5+c(1:sim.N)],1,q025),
+           hc.doy.out$DOY,apply(hc.doy.out[,5+c(1:sim.N)],1,q975),
+           col="deepskyblue",lwd=1)
+  segments(hc.doy.out2$DOY,apply(hc.doy.out2[,5+c(1:sim.N)],1,q250),
+           hc.doy.out2$DOY,apply(hc.doy.out2[,5+c(1:sim.N)],1,q750),
+           col="darkorange",lwd=3)
+  segments(hc.doy.out2$DOY,apply(hc.doy.out2[,5+c(1:sim.N)],1,q025),
+           hc.doy.out2$DOY,apply(hc.doy.out2[,5+c(1:sim.N)],1,q975),
+           col="darkorange",lwd=1)
+  mtext(side=3,paste(case),line=0.5,font=2)
+  legend(0,zmax,legend=c(expression(lambda[rs]~'='~1.00),expression(lambda[rs]~'='~1.25)),
+         fill=c("deepskyblue","darkorange"),border=NA,bty="n")
+}
+```
+
+
+### Output the calculated ha 
+```{r include=T,echo=T}     
+if(file.output){
+  write.table(hc.doy.out,paste(OutDir,case,"_",lwd,"d","_canopy-height1.csv",sep=""),sep=",",row.names=F)
+  write.table(hc.doy.out2,paste(OutDir,case,"_",lwd,"d","_canopy-height2.csv",sep=""),sep=",",row.names=F)
+}
+```
+

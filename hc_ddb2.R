@@ -9,41 +9,40 @@ hc_ddb2<-function(data.in,
   {
   
   # Modified from Pennypacker & Baldocchi 2015 BLM  
-  #   FP-DB
+  # Estimate ha (aerodynamic canopy height) from WS, USTAR, assumeing z0/ha and d/ha are known (default as 0.1 & 0.6)
   #
-  # Estimate hc from timeseries of WS, USTAR, assumeing z0/hc and d/hc are known (default as 0.1 & 0.6)
-  #
-  #   Input arguments:
-  #    data.in: 4 columns R data.frame of WS (m/s), USTAR (m/s), MO_LENGTH (m), zm (m), measurements at t time steps
-  #    zmax: maximum zm in the data.in, this is used for the first guess of z in z/L, and for setting the acceptable upper bound for calculated ha 
-  #    d.hr: N of time steps per day, 24 for hourly files, 48 for half-hourly files  
-  #    coef1: z0/hc
-  #    coef2: d/hc
-  #    lamda: roughness sublayer enhancing factor (1-1.25, Massman 1997, 2017), default as 1 (i.e., no RS correction)
-  #    zL.cut: cutoff z/L for near-neutral stability, i.e., zL.cut  > near-neutral >  -zL.cut
-  #    zm.cut: remove ha estimates that are higher than 1.1*zm, or not
+  #  [Input arguments]
+  #    data.in:   4 columns R data.frame of WS (m/s), USTAR (m/s), MO_LENGTH (m), zm (m), at t consective time steps
+  #    zmax:      maximum zm (measurement height of WS) in the data.in, this is used for the first guess of z in z/L, 
+  #               and for setting the acceptable upper bound for calculated ha 
+  #    d.hr:      N of time steps per day, default as 48 for half-hourly files, use 24 for hourly files 
+  #    coef1:     z0/ha, default as 0.1
+  #    coef2:     d/ha, default as 0.6 
+  #    lamda:     roughness sublayer enhancing factor (1-1.25, Massman 1997, 2017), default as 1 (i.e., no RS correction)
+  #    zL.cut:    cutoff z/L for near-neutral stability, i.e., zL.cut  > near-neutral >  -zL.cut, default as 0.1
+  #    zm.cut:    remove ha estimates that are higher than 1.1*zm, or not, default as yes
   #
   #  [Description]
   #   Starting from the logarithmic wind profile:  k*WS/USTAR = ln((zm-d)/z0) + ln(lamda) where
-  #       WS: wind speed m/s
-  #       USTAR: friction velocity m/s
-  #       k: von karman constant, 0.4
-  #       zm: measurement height, m
-  #       z0: roughness length m
-  #       L: Obukhoc length m
-  #       lamda: roughness sublayer enhancing factor 
+  #     WS:       wind speed m/s
+  #     USTAR:    friction velocity m/s
+  #     k:        von karman constant, 0.4
+  #     zm:       measurement height, m
+  #     z0:       roughness length m
+  #     L:        Obukhoc length m
+  #     lamda:    roughness sublayer enhancing factor 
   #
   #   Assume z0=coef1*ha; d=coef2*ha, where ha is the theoretical canopy height (aerodynamic canopy height, m) 
   #   then, for any given coef1 & coef2, we can calculated ha from the equation:
   #       ha <- lamda*zm/(lamda*coef2+coef1*exp(k*WS/USTAR))
   #
   #   [Output]
-  #    ha : estimated aerodynamic canopy height
-  #    z (= zm - d) : sensor height above displacement height
-  #    z0 : roughness length, based on ha * coef1
-  #    d  : zero-plane displacement height, based on ha * coef2
-  #    N : Number of available data for calculation
-  #    Nin : Number of supposed data length in input
+  #    ha:        estimated aerodynamic canopy height
+  #    z:         (= zm - d) sensor height above displacement height
+  #    z0:        roughness length, based on ha * coef1
+  #    d:         zero-plane displacement height, based on ha * coef2
+  #    N:         Number of available data for calculation
+  #    Nin:       Number of supposed data length in input
   #   
 
   na.mean<-function(x) {ifelse(!is.nan(mean(x,na.rm=T)),mean(x,na.rm=T),NA)}
