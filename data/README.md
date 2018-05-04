@@ -1,6 +1,6 @@
 This /data directory contains results of aerodynamic canopy heights, interannual trend analyses of forest sites, and the comparisons of aerodynamic and physical canopy heights at the cropland/grasslnad sites. Three subfolders contains results using each of the three z0/h-d/h models, i.e., the Classical model (FIXED), Raupach [1994] (R94), and Schaudt and Dickinson [2000] (SD00). Each subfolder has the following files:   
 
-####2018-02-03-<model>-UNC-forest-fullfoliate-3month.csv  
+#### 2018-02-03-<model>-UNC-forest-fullfoliate-3month.csv  
 Annual estimates of aerodynamic canopy heights for all forest sites, using the 3-month full-foliated period data. 
 * SITE_ID: 6 digit AmeriFlux/Fluxnet Site ID	
 * YEAR: year of estimate
@@ -17,10 +17,10 @@ Annual estimates of aerodynamic canopy heights for all forest sites, using the 3
 * ha.mdl.q750: 75% percentile estimated aerodynamic canopy height based on the model specified
 * ha.mdl.q975: 97.5% percentile estimated aerodynamic canopy height based on the model specified
 
-####2018-02-03-<model>-UNC-forest-leafless-3month.csv
+#### 2018-02-03-<model>-UNC-forest-leafless-3month.csv
 Annual estimates of aerodynamic canopy heights for all forest sites, using the 3-month leafless period data. This file has the same variable names as the above one. 
   
-####2018-02-03-<model>-UNC-forest-fullfoliate-3month-trend.csv
+#### 2018-02-03-<model>-UNC-forest-fullfoliate-3month-trend.csv
 Results of trend analyses on annual aerodynamic canopy heights at long-term all forest sites, based on 3-month full-foliated period data
 * SITE_ID: 6 digit AmeriFlux/Fluxnet Site ID	
 * slope: sen's slope (m yr-1) 
@@ -29,10 +29,10 @@ Results of trend analyses on annual aerodynamic canopy heights at long-term all 
 * intpt: intercept, corresponding to the original mean (m)
 * pvalue: p value  
 
-####2018-02-03-<model>-UNC-forest-leafless-3month-trend.csv
+#### 2018-02-03-<model>-UNC-forest-leafless-3month-trend.csv
 Results of trend analyses on annual aerodynamic canopy heights at long-term all forest sites, based on 3-month full-foliated period data. This file has the same variable names as the above one. 
 
-####2018-02-03-<model>-UNC-shortvege-7day-hc-site-crop-comparison.csv
+#### 2018-02-03-<model>-UNC-shortvege-7day-hc-site-crop-comparison.csv
 Results of the linear comparison between physical and aerodynamic canopy heights. All years with the same crop/vegetation types for a sites are grouped and analyzed together.    
 * case: 6 digit AmeriFlux/Fluxnet Site ID	+ crop/vegetation type planted
 * site: 6 digit AmeriFlux/Fluxnet Site ID	
@@ -49,11 +49,11 @@ Results of the linear comparison between physical and aerodynamic canopy heights
 * n: sample number
 * crop2: agregated crop/vegetation types
   
-####2018-02-03-<model>-UNC-shortvege-7day-hc-site-year-comparison.csv
+#### 2018-02-03-<model>-UNC-shortvege-7day-hc-site-year-comparison.csv
 Results of the linear comparison between physical and aerodynamic canopy heights, separated by each individual year. This file has almost identical variable names as the above one, except an additional column:
 * year: the year of comparison   
 
-####2018-02-03-<model>-UNC-shortvege-7day-hc.csv
+#### 018-02-03-<model>-UNC-shortvege-7day-hc.csv
 Weekly estimates of aerodynamic canopy heights for all cropland/grassland sites. 
 * SITE_ID: 6 digit AmeriFlux/Fluxnet Site ID	
 * YEAR: year of estimate
