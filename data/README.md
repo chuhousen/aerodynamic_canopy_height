@@ -1,6 +1,6 @@
 This /data directory contains results of aerodynamic canopy heights, interannual trend analyses of forest sites, and the comparisons of aerodynamic and physical canopy heights at the cropland/grasslnad sites. Three subfolders contains results using each of the three z0/h-d/h models, i.e., the Classical model (FIXED), Raupach [1994] (R94), and Schaudt and Dickinson [2000] (SD00). Each subfolder has the following files:   
 
-#### 2018-02-03-/<model/>-UNC-forest-fullfoliate-3month.csv  
+#### 2018-02-03-/<model>-UNC-forest-fullfoliate-3month.csv  
 Annual estimates of aerodynamic canopy heights for all forest sites, using the 3-month full-foliated period data. 
 * SITE_ID: 6 digit AmeriFlux/Fluxnet Site ID	
 * YEAR: year of estimate
