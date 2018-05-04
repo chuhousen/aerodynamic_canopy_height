@@ -11,11 +11,11 @@ Annual estimates of aerodynamic canopy heights for all forest sites, using the 3
 * HEIGHTC_LOWER: lower range of physical canopy height (m)
 * WD: selected wind direction 
 * N.sample: Number of data points used
-* ha.mdl.q025: 2.5% percentile estimated aerodynamic canopy height based on the model specified 
-* ha.mdl.q250: 25% percentile estimated aerodynamic canopy height based on the model specified
-* ha.mdl.q500: 50% percentile estimated aerodynamic canopy height based on the model specified
-* ha.mdl.q750: 75% percentile estimated aerodynamic canopy height based on the model specified
-* ha.mdl.q975: 97.5% percentile estimated aerodynamic canopy height based on the model specified
+* ha.mdl.q025: 2.5% percentile estimated aerodynamic canopy height based on the model specified (m)
+* ha.mdl.q250: 25% percentile estimated aerodynamic canopy height based on the model specified (m)
+* ha.mdl.q500: 50% percentile estimated aerodynamic canopy height based on the model specified (m)
+* ha.mdl.q750: 75% percentile estimated aerodynamic canopy height based on the model specified (m)
+* ha.mdl.q975: 97.5% percentile estimated aerodynamic canopy height based on the model specified (m)
 
 #### 2018-02-03-model-UNC-forest-leafless-3month.csv
 Annual estimates of aerodynamic canopy heights for all forest sites, using the 3-month leafless period data. This file has the same variable names as the above one. 
@@ -37,14 +37,14 @@ Results of the linear comparison between physical and aerodynamic canopy heights
 * case: 6 digit AmeriFlux/Fluxnet Site ID	+ crop/vegetation type planted
 * site: 6 digit AmeriFlux/Fluxnet Site ID	
 * crop: crop/vegetation type planted
-* incpt: intercept of the linear regression
-* incpt.025: lower bound of the 95% confidence interval of the intercept
-* incpt.975: upper bound of the 95% confidence interval of the intercept
+* incpt: intercept of the linear regression (m)
+* incpt.025: lower bound of the 95% confidence interval of the intercept (m)
+* incpt.975: upper bound of the 95% confidence interval of the intercept (m)
 * slope: slope of the linear regression
 * slope.025: lower bound of the 95% confidence interval of the slope
 * slope.975: upper bound of the 95% confidence interval of the slope
-* rng.l: lower bound of canopy heights
-* rng.u: upper bound of canopy heights
+* rng.l: lower bound of canopy heights (m)
+* rng.u: upper bound of canopy heights (m)
 * rsqur: R2 the coefficient of determination
 * n: sample number
 * crop2: agregated crop/vegetation types
@@ -62,8 +62,8 @@ Weekly estimates of aerodynamic canopy heights for all cropland/grassland sites.
 * EC_HEIGHT: measurement height of eddy covariance system (m)
 * WD: selected wind direction 
 * N.sample: Number of data points used
-* ha.mdl.q025: 2.5% percentile estimated aerodynamic canopy height based on the model specified 
-* ha.mdl.q250: 25% percentile estimated aerodynamic canopy height based on the model specified
-* ha.mdl.q500: 50% percentile estimated aerodynamic canopy height based on the model specified
-* ha.mdl.q750: 75% percentile estimated aerodynamic canopy height based on the model specified
-* ha.mdl.q975: 97.5% percentile estimated aerodynamic canopy height based on the model specified
+* ha.mdl.q025: 2.5% percentile estimated aerodynamic canopy height based on the model specified (m)
+* ha.mdl.q250: 25% percentile estimated aerodynamic canopy height based on the model specified (m)
+* ha.mdl.q500: 50% percentile estimated aerodynamic canopy height based on the model specified (m)
+* ha.mdl.q750: 75% percentile estimated aerodynamic canopy height based on the model specified (m)
+* ha.mdl.q975: 97.5% percentile estimated aerodynamic canopy height based on the model specified (m)
