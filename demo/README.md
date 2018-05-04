@@ -1,0 +1,1 @@
+The /demo folder show two workflow examples for calculating ha at a forest site (estimate at a annual time step) and a cropland site (estimate at a weekly time step). Its subfolders /demo/input and /demo/output provide example files of the calculation input and output. 
