@@ -53,7 +53,7 @@ Results of the linear comparison between physical and aerodynamic canopy heights
 Results of the linear comparison between physical and aerodynamic canopy heights, separated by each individual year. This file has almost identical variable names as the above one, except an additional column:
 * year: the year of comparison   
 
-#### 018-02-03-model-UNC-shortvege-7day-hc.csv
+#### 2018-02-03-model-UNC-shortvege-7day-hc.csv
 Weekly estimates of aerodynamic canopy heights for all cropland/grassland sites. 
 * SITE_ID: 6 digit AmeriFlux/Fluxnet Site ID	
 * YEAR: year of estimate
