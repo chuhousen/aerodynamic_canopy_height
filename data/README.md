@@ -16,9 +16,14 @@ Annual estimates of aerodynamic canopy heights for all forest sites, using the 3
 * ha.mdl.q500: 50% percentile estimated aerodynamic canopy height based on the model specified (m)
 * ha.mdl.q750: 75% percentile estimated aerodynamic canopy height based on the model specified (m)
 * ha.mdl.q975: 97.5% percentile estimated aerodynamic canopy height based on the model specified (m)
+* hc.hat.q025: 2.5% percentile predicted canopy height based aerodynamic canopy height and vegetation-specific ha-hc empirical model (m)
+* hc.hat.q250: 25% percentile predicted canopy height based aerodynamic canopy height and vegetation-specific ha-hc empirical model (m)
+* hc.hat.q500: 50% percentile predicted canopy height based aerodynamic canopy height and vegetation-specific ha-hc empirical model (m)
+* hc.hat.q750: 75% percentile predicted canopy height based aerodynamic canopy height and vegetation-specific ha-hc empirical model (m)
+* hc.hat.q975: 97.5% percentile predicted canopy height based aerodynamic canopy height and vegetation-specific ha-hc empirical model (m)
 
 #### 2018-02-03-model-UNC-forest-leafless-3month.csv
-Annual estimates of aerodynamic canopy heights for all forest sites, using the 3-month leafless period data. This file has the same variable names as the above one. 
+Annual estimates of aerodynamic canopy heights for all forest sites, using the 3-month leafless period data. This file has the same variable names as the above one, except the emipircally predicted canopy height. 
   
 #### 2018-02-03-model-UNC-forest-fullfoliate-3month-trend.csv
 Results of trend analyses on annual aerodynamic canopy heights at long-term all forest sites, based on 3-month full-foliated period data
@@ -67,3 +72,14 @@ Weekly estimates of aerodynamic canopy heights for all cropland/grassland sites.
 * ha.mdl.q500: 50% percentile estimated aerodynamic canopy height based on the model specified (m)
 * ha.mdl.q750: 75% percentile estimated aerodynamic canopy height based on the model specified (m)
 * ha.mdl.q975: 97.5% percentile estimated aerodynamic canopy height based on the model specified (m)
+* hc.hat1.q025: 2.5% percentile predicted canopy height based aerodynamic canopy height and vegetation-specific ha-hc empirical model (m)
+* hc.hat1.q250: 25% percentile predicted canopy height based aerodynamic canopy height and vegetation-specific ha-hc empirical model (m)
+* hc.hat1.q500: 50% percentile predicted canopy height based aerodynamic canopy height and vegetation-specific ha-hc empirical model (m)
+* hc.hat1.q750: 75% percentile predicted canopy height based aerodynamic canopy height and vegetation-specific ha-hc empirical model (m)
+* hc.hat1.q975: 97.5% percentile predicted canopy height based aerodynamic canopy height and vegetation-specific ha-hc empirical model (m)
+* hc.hat2.q025: 2.5% percentile predicted canopy height based aerodynamic canopy height and site-specific ha-hc empirical model (m)
+* hc.hat2.q250: 25% percentile predicted canopy height based aerodynamic canopy height and site-specific ha-hc empirical model (m)
+* hc.hat2.q500: 50% percentile predicted canopy height based aerodynamic canopy height and site-specific ha-hc empirical model (m)
+* hc.hat2.q750: 75% percentile predicted canopy height based aerodynamic canopy height and site-specific ha-hc empirical model (m)
+* hc.hat2.q975: 97.5% percentile predicted canopy height based aerodynamic canopy height and site-specific ha-hc empirical model (m)
+
