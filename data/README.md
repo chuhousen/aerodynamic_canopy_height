@@ -1,6 +1,6 @@
 This /data directory contains results of aerodynamic canopy heights (ha), interannual trend analyses of forest sites, and the comparisons of ha and actual canopy heights (hc) at the cropland/grasslnad sites. Three subfolders contains results using each of the three z0/h-d/h models, i.e., the Classical model (FIXED), Raupach [1994] (R94), and Schaudt and Dickinson [2000] (SD00). As discussed in the paper, we suggest use the SD00 model for forest sites, and R94 model for cropland/grassland sites. Details about using different models can be found in the paper.
 
-#### This two files contain the best available estimates of ha and empirically corrected hc, that can be used directly:  
+#### The following two files contain the best available estimates of ha and empirically corrected hc, that can be used directly:  
 * /SD00/2018-02-03-SD00-UNC-forest-fullfoliate-3month.csv  
 * /R94/2018-02-03-R94-UNC-shortvege-7day-hc.csv
 
